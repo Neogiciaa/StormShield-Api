@@ -1,0 +1,16 @@
+{
+  "name": "stormshield",
+  "type": "module",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "STAMP",
+  "license": "MIT",
+  "description": "StormShield's aim is to retrieve weather alerts detected by weather monitoring organizations and cross-reference them with the locations of Orange customers' mobiles to alert them.",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1"
+  }
+}

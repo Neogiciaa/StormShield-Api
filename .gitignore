@@ -1,0 +1,8 @@
+# IDE Files
+.idea
+
+# Project dependencies
+node_modules
+
+# Environment variables
+.env
