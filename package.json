@@ -10,6 +10,7 @@
   "license": "MIT",
   "description": "StormShield's aim is to retrieve weather alerts detected by weather monitoring organizations and cross-reference them with the locations of Orange customers' mobiles to alert them.",
   "dependencies": {
+    "axios": "^1.7.8",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "mysql2": "^3.11.5"
