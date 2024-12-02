@@ -1,14 +1,25 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import weatherRoutes from './routes/weatherRoutes.js';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.DB_PORT;
 
-// Middleware pour parser le body des requetes en JSON et permettre l'accès a req.body
-app.use(express.json());
-
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+// Middleware pour parser le body des requêtes en JSON et accéder au req.body
+app.use(express.json());
+
+app.get('/', (req, res) => {
+    res.send('StormShield backend is running!');
+});
+
+// Utilisation des routes définies dans weatherRoutes.js
+app.use('/api', weatherRoutes);
+
+
+
