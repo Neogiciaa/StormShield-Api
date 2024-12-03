@@ -49,7 +49,7 @@ async function createDatabase() {
         `);
         // Création de la table Warning_Alert qui permettra aux gens de signaler des évenements liés aux intempéries.
         await connexion.query(`
-            CREATE TABLE IF NOT EXISTS Warning_Alert (
+            CREATE TABLE IF NOT EXISTS WarningAlert (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 message VARCHAR(255) NOT NULL,
                 vote INT NOT NULL,
