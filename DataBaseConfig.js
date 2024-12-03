@@ -3,10 +3,12 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+let connexion;
+
 async function createDatabase() {
     try {
         // Connexion sans spécifier de base de données
-        const connexion = await mysql.createConnection({
+        connexion = await mysql.createConnection({
             host: process.env.DB_HOST,
             user: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
@@ -69,3 +71,5 @@ async function createDatabase() {
 }
 
 createDatabase();
+
+export default connexion;
