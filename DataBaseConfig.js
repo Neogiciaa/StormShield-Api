@@ -51,7 +51,7 @@ async function createDatabase() {
         await connexion.query(`
             CREATE TABLE IF NOT EXISTS WarningAlert (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                message VARCHAR(255) NOT NULL,
+                description VARCHAR(255) NOT NULL,
                 vote INT NOT NULL,
                 locationId INT NOT NULL,
                 createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,

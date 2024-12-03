@@ -15,3 +15,4 @@ export const fetchWeatherData = async (lat, lon) => {
 );
     return response.data;
 };
+
