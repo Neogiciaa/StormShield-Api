@@ -53,17 +53,17 @@ const alerts = {
     },
     'extreme-cold': {
         'moderate': { 
-            'temperature': { max: -11, min: -25 }, // Very cold (light-blue)
-            'wind': { min: 51, max: 80 } // Strong wind (orange)
+            'temperature': { max: -11, min: -24 }, // Very cold (light-blue)
+            'wind': { min: 0, max: 80 } // Strong wind (orange)
         },
         'high': { 
-            'temperature': { max: -26 }, // Extreme cold (blue)
-            'wind': { min: 81 } // Very strong wind (red or extreme-red)
+            'temperature': { max: -25, min: -100 }, // Extreme cold (blue)
+            'wind': { min: 0, max: 80 } // Very strong wind (red or extreme-red)
         }
     }
 };
 
-function checkAlerts(weatherData) {
+function checkAlerts(weatherData, lat, lon) {
     const triggeredAlerts = [];
 
     if (weatherData.rain >= alerts.flood.moderate.rain.min && weatherData.rain <= alerts.flood.moderate.rain.max && weatherData.pressure <= alerts.flood.moderate.pressure.max && weatherData.pressure >= alerts.flood.moderate.pressure.min) {
@@ -151,37 +151,47 @@ function checkAlerts(weatherData) {
         triggeredAlerts.push('High Extreme Cold Alert');
     }
 
-    return triggeredAlerts;
+    // if(weatherData.pressure === 1012){
+    //     triggeredAlerts.push('Pressure Alert');
+    // }
+
+    if (triggeredAlerts.length > 0){
+        const LocationAndAlerts = {lat, lon, triggeredAlerts};
+    }
+
+    return LocationAndAlerts;
 }
 
 
 export const getWeatherDatas = async (req, res) => {
-    // const { lat, lon } = await req.query;
+    const { lat, lon } = await req.query;
     try {
-        const weatherData = await fetchWeatherData("-22.9028", "-43.2075");
-        const weatherDataFormatted = weatherData.list.filter(data => data.dt_txt.includes('12:00:00')).map(data => {
-            return {
+        const weatherData = await fetchWeatherData("2", "152");
+        //console.log(weatherData);
+        const weatherDataFormatted = weatherData.list.filter(data => data.dt_txt.includes('12:00:00')).map(data => ({
                 date: data.dt_txt,
                 temperature: data.main.temp,
                 humidity: data.main.humidity,
                 cloud: data.clouds.all,
                 wind: data.wind.speed,
                 pressure: data.main.pressure,
-                snow: data.snow,
-                rain: data.rain,
-            }
-            
-        });
+                snow: data.snow || 0,
+                rain: data.rain?.['3h'] || 0,
+        }));
 
-        res.status(200).json(weatherDataFormatted);
+        const weatherDataIndex = weatherDataFormatted[0];
+        const activeAlerts = checkAlerts(weatherDataIndex, lat, lon);
+        console.log(activeAlerts);
+
+        res.status(200).json({ weatherDataFormatted, activeAlerts });
 
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-const activeAlerts = checkAlerts(getWeatherDatas);
 
-console.log(`Active Alerts : ${activeAlerts}`);
+
+
 
 // C'est dans ce controller que l'on viendra appliquer des traitements sur nos datas, par ex les filtrer pour récupérer uniquement celles qui ont 12h en dt.txt :eyes:
