@@ -151,12 +151,11 @@ function checkAlerts(weatherData, lat, lon) {
         triggeredAlerts.push('High Extreme Cold Alert');
     }
 
-    // if(weatherData.pressure === 1012){
-    //     triggeredAlerts.push('Pressure Alert');
-    // }
-
+    let LocationAndAlerts = {};
+    
     if (triggeredAlerts.length > 0){
-        const LocationAndAlerts = {lat, lon, triggeredAlerts};
+        
+        LocationAndAlerts = {"lat":"50", "lon":"60", triggeredAlerts};
     }
 
     return LocationAndAlerts;
