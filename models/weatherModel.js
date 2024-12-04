@@ -12,6 +12,6 @@ export const fetchWeatherData = async (lat, lon) => {
                 appid: apiKey
             }
         }
-);
+
     return response.data;
 };
