@@ -6,4 +6,6 @@ const router = express.Router();
 // Route pour obtenir les alertes météo
 router.get('/getWeatherDatas', getWeatherDatas);
 
+router.get('/getWeatherDatas/?')
+
 export default router;

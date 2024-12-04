@@ -15,11 +15,11 @@ const alerts = {
     },
     'storm': {
         'moderate': { 
-            'wind': { min: 51, max: 80 }, // Strong wind (orange)
+            'wind': { min: (51/3.6), max: (80/3.6)}, // Strong wind (orange)
             'pressure': { max: 1014, min: 1005 } // Low pressure (orange)
         },
         'high': { 
-            'wind': { min: 81 }, // Very strong wind (red or extreme-red)
+            'wind': { min: (81/3.6) }, // Very strong wind (red or extreme-red)
             'pressure': { max: 1004 } // Very low pressure (red or extreme-red)
         }
     },
@@ -35,10 +35,10 @@ const alerts = {
     },
     'strong-wind': {
         'moderate': { 
-            'wind': { min: 51, max: 80 } // Strong wind (orange)
+            'wind': { min: (51/3.6), max: (80/3.6) } // Strong wind (orange)
         },
         'high': { 
-            'wind': { min: 81 } // Very strong wind (red or extreme-red)
+            'wind': { min: (81/3.6) } // Very strong wind (red or extreme-red)
         }
     },
     'extreme-heat': {
@@ -54,11 +54,11 @@ const alerts = {
     'extreme-cold': {
         'moderate': { 
             'temperature': { max: -11, min: -24 }, // Very cold (light-blue)
-            'wind': { min: 0, max: 80 } // Strong wind (orange)
+            'wind': { min: 0, max: (80/3.6) } // Strong wind (orange)
         },
         'high': { 
             'temperature': { max: -25, min: -100 }, // Extreme cold (blue)
-            'wind': { min: 0, max: 80 } // Very strong wind (red or extreme-red)
+            'wind': { min: 0, max: (80/3.6) } // Very strong wind (red or extreme-red)
         }
     }
 };
@@ -155,17 +155,17 @@ function checkAlerts(weatherData, lat, lon) {
     
     if (triggeredAlerts.length > 0){
         
-        LocationAndAlerts = {"lat":"50", "lon":"60", triggeredAlerts};
+        LocationAndAlerts = {"Latitude" : lat , "longitude" : lon , triggeredAlerts};
     }
-
     return LocationAndAlerts;
 }
 
 
 export const getWeatherDatas = async (req, res) => {
     const { lat, lon } = await req.query;
+    console.log(lat, lon);
     try {
-        const weatherData = await fetchWeatherData("2", "152");
+        const weatherData = await fetchWeatherData(lat, lon);
         //console.log(weatherData);
         const weatherDataFormatted = weatherData.list.filter(data => data.dt_txt.includes('12:00:00')).map(data => ({
                 date: data.dt_txt,
@@ -177,6 +177,8 @@ export const getWeatherDatas = async (req, res) => {
                 snow: data.snow || 0,
                 rain: data.rain?.['3h'] || 0,
         }));
+
+        console.log(weatherDataFormatted);
 
         const weatherDataIndex = weatherDataFormatted[0];
         const activeAlerts = checkAlerts(weatherDataIndex, lat, lon);
