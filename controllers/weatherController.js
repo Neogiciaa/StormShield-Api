@@ -171,20 +171,20 @@ async function checkAlerts(weatherData, lat, lon) {
         const newLocationId = newLocation.insertId;
         await createAlert(newLocationId, 'High Extreme Cold Alert');
     }
-  
+
     // TODO A delete quand tout sera good !
     if (weatherData.pressure === 1027) {
         const newLocation = await createLocation(lat, lon);
         const newLocationId = newLocation.insertId;
         await createAlert(newLocationId, 'Test Alert');
     }
-  
+
     return LocationAndAlerts;
 }
 
 export const getWeatherDatas = async (req, res) => {
     const { lat, lon } = await req.query;
-   
+
     try {
         const weatherData = await fetchWeatherData(lat, lon);
         const weatherDataFormatted = weatherData.list.filter(data => data.dt_txt.includes('12:00:00')).map(data => ({
