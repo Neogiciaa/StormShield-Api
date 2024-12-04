@@ -3,15 +3,13 @@ import connexion from "../DataBaseConfig.js";
 export const createWarningAlert = async (req, res) => {
     const { description, lat, lon } = req.body;
     try {
-        const newLocation = await connexion.query(`INSERT INTO Location VALUES (?, ?), [lat, lon])]`);
-        const createdLocationId = result.insertId;
+        const newLocation = await connexion.query(`INSERT INTO Location (latitude, longitude) VALUES (?, ?), [lat, lon]`);
+        const createdLocationId = newLocation.insertId;
 
-        const newAlert = await connexion.query(`INSERT INTO Alert VALUES (?, ?), [description, locationId]`);
-
-
-
-
-
+        const newWarningAlert = await connexion.query(
+            `INSERT INTO WarningAlert (description, locationId) VALUES (?, ?)`,
+            [description, createdLocationId]
+        );
 
         res.status(200).json({ data: newAlert });
     } catch (error) {
