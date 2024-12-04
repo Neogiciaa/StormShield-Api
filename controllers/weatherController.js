@@ -150,6 +150,10 @@ function checkAlerts(weatherData, lat, lon) {
     ) {
         triggeredAlerts.push('High Extreme Cold Alert');
     }
+    // TEST !!!
+    if (weatherData.pressure === 1027) {
+        triggeredAlerts.push('test');
+    }
 
     let LocationAndAlerts = {};
     
@@ -157,6 +161,9 @@ function checkAlerts(weatherData, lat, lon) {
         
         LocationAndAlerts = {"Latitude" : lat , "longitude" : lon , triggeredAlerts};
     }
+
+
+
     return LocationAndAlerts;
 }
 
