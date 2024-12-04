@@ -62,6 +62,11 @@ const alerts = {
     }
 };
 
+export async function saveLocation(lat, lon) {
+    const newLocation = await connexion.query(`INSERT INTO Location (latitude, longitude) VALUES (?, ?)`, [lat, lon]);
+    return newLocation;
+}
+
 async function checkAlerts(weatherData, lat, lon) {
     if (weatherData.rain >= alerts.flood.moderate.rain.min && weatherData.rain <= alerts.flood.moderate.rain.max && weatherData.pressure <= alerts.flood.moderate.pressure.max && weatherData.pressure >= alerts.flood.moderate.pressure.min) {
         const newLocation = await createLocation(lat, lon);
