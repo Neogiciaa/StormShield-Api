@@ -1,5 +1,4 @@
-import {fetchWeatherData} from '../models/weatherModel.js';
-
+import { fetchWeatherData } from '../models/weatherModel.js';
 
 // Add snow params !!!IMPORTANT
 const alerts = {
@@ -172,28 +171,22 @@ async function checkAlerts(weatherData, lat, lon) {
         const newLocationId = newLocation.insertId;
         await createAlert(newLocationId, 'High Extreme Cold Alert');
     }
-    // TEST !!! A SUPPRIMER !!!
+  
+    // TODO A delete quand tout sera good !
     if (weatherData.pressure === 1027) {
         const newLocation = await createLocation(lat, lon);
         const newLocationId = newLocation.insertId;
         await createAlert(newLocationId, 'Test Alert');
     }
-
-   
-
-
-
+  
     return LocationAndAlerts;
 }
 
-
-
 export const getWeatherDatas = async (req, res) => {
     const { lat, lon } = await req.query;
-    console.log(lat, lon);
+   
     try {
         const weatherData = await fetchWeatherData(lat, lon);
-        //console.log(weatherData);
         const weatherDataFormatted = weatherData.list.filter(data => data.dt_txt.includes('12:00:00')).map(data => ({
                 date: data.dt_txt,
                 temperature: data.main.temp,
@@ -205,11 +198,8 @@ export const getWeatherDatas = async (req, res) => {
                 rain: data.rain?.['3h'] || 0,
         }));
 
-        console.log(weatherDataFormatted);
-
         const weatherDataIndex = weatherDataFormatted[0];
         const activeAlerts = checkAlerts(weatherDataIndex, lat, lon);
-        console.log(activeAlerts);
 
         res.status(200).json({ weatherDataFormatted, activeAlerts });
 
@@ -217,9 +207,3 @@ export const getWeatherDatas = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-
-
-
-
-
-// C'est dans ce controller que l'on viendra appliquer des traitements sur nos datas, par ex les filtrer pour récupérer uniquement celles qui ont 12h en dt.txt :eyes:

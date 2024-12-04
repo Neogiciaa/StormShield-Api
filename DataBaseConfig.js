@@ -47,6 +47,19 @@ async function createDatabase() {
                 FOREIGN KEY (locationId) REFERENCES Location(id)
             );
         `);
+        // Création de la table Warning_Alert qui permettra aux gens de signaler des évenements liés aux intempéries.
+        await connexion.query(`
+            CREATE TABLE IF NOT EXISTS WarningAlert (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                message VARCHAR(255) NOT NULL,
+                vote INT NOT NULL,
+                locationId INT NOT NULL,
+                createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+                updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                deletedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                FOREIGN KEY (locationId) REFERENCES Location(id)
+            );
+        `);
 
         console.log(`Base de données '${databaseName}' créée avec succès !`);
 
