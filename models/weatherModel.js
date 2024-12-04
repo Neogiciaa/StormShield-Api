@@ -11,8 +11,8 @@ export const fetchWeatherData = async (lat, lon) => {
                 units: 'metric',
                 appid: apiKey
             }
-        }
-);
+        })
+
     return response.data;
 };
 
