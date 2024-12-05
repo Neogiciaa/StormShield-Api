@@ -211,7 +211,6 @@ export const getWeatherDatas = async (req, res) => {
 
 export const getWeatherDatasByCityName = async (req, res) => {
     const  cityName  = req.query;
-    console.log("City -> ", cityName.q);
     try {
         const weatherData = await fetchWeatherDataByCityName(cityName.q);
         const weatherDataFormatted = weatherData.list.filter(data => data.dt_txt.includes('12:00:00')).map(data => ({
