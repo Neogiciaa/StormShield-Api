@@ -1,5 +1,6 @@
 import express from 'express';
-import { getWeatherDatas, saveLocation } from '../controllers/weatherController.js';
+import { getWeatherDatas } from '../controllers/weatherController.js';
+import { saveLocationAndGetLocationId } from '../models/weatherModel.js';
 
 
 const router = express.Router();
@@ -7,7 +8,7 @@ const router = express.Router();
 // Route pour obtenir les alertes météo
 router.get('/getWeatherDatas', getWeatherDatas);
 
-router.post('/saveLocation', saveLocation);
+router.post('/saveLocation', saveLocationAndGetLocationId);
 
 
 

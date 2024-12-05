@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 async function createDatabase() {
+    let connexion;
     try {
         // Connexion sans spécifier de base de données
         const connexion = await mysql.createConnection({
