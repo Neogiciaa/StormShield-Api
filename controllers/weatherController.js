@@ -162,11 +162,10 @@ async function checkAlerts(weatherData, lat, lon) {
     }
 
     // TODO A delete quand tout sera good !
-    if (weatherData.pressure === 1027) {
+    if (weatherData.temperature === 2.15) {
         const newLocationId = await saveLocationAndGetLocationId(lat, lon);
         await createAlert (newLocationId, 'Test Alerte', weatherData.pressure);
     }
-
 }
 
 export const getWeatherDatas = async (req, res) => {
@@ -175,20 +174,21 @@ export const getWeatherDatas = async (req, res) => {
     try {
         const weatherData = await fetchWeatherData(lat, lon);
         const weatherDataFormatted = weatherData.list.filter(data => data.dt_txt.includes('12:00:00')).map(data => ({
-                date: data.dt_txt,
-                temperature: data.main.temp,
-                humidity: data.main.humidity,
-                cloud: data.clouds.all,
-                wind: data.wind.speed,
-                pressure: data.main.pressure,
-                snow: data.snow || 0,
-                rain: data.rain?.['3h'] || 0,
+            date: data.dt_txt,
+            temperature: data.main.temp,
+            humidity: data.main.humidity,
+            cloud: data.clouds.all,
+            wind: data.wind.speed,
+            pressure: data.main.pressure,
+            snow: data.snow || 0,
+            rain: data.rain?.['3h'] || 0,
         }));
 
-        const weatherDataIndex = weatherDataFormatted[0];
-        const activeAlerts = checkAlerts(weatherDataIndex, lat, lon);
+        weatherDataFormatted.map(async (data) => {
+            await checkAlerts(data, lat, lon);
+        });
 
-        res.status(200).json({ weatherDataFormatted, activeAlerts });
+        res.status(200).json({ weatherDataFormatted });
 
     } catch (error) {
         res.status(500).json({ message: error.message });
