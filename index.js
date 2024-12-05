@@ -7,10 +7,13 @@ import geoFencingRoutes from "./routes/geoFencingRoutes.js";
 dotenv.config();
 
 const app = express();
+const SERVER_PORT = process.env.SERVER_PORT;
+
+app.use(cors());
 const PORT = process.env.SERVER_PORT;
 
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on http://localhost:${SERVER_PORT}`);
 });
 
 // Middleware pour parser le body des requêtes en JSON et accéder au req.body

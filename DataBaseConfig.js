@@ -10,6 +10,7 @@ async function createDatabase() {
         connexion = await mysql.createConnection({
             host: process.env.DB_HOST,
             user: process.env.DB_USER,
+            port: process.env.DB_PORT,
             password: process.env.DB_PASSWORD,
         });
 
@@ -26,7 +27,6 @@ async function createDatabase() {
         await connexion.query(`
             CREATE TABLE IF NOT EXISTS Location (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                cityName VARCHAR(255) NOT NULL,
                 latitude VARCHAR(50) NOT NULL,
                 longitude VARCHAR(50) NOT NULL,
                 createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -39,7 +39,7 @@ async function createDatabase() {
             CREATE TABLE IF NOT EXISTS Alert (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(255) NOT NULL,
-                intensity ENUM('low', 'medium', 'high') NOT NULL,
+                intensity VARCHAR(255) NOT NULL,
                 locationId INT NOT NULL,
                 alertedUsers INT DEFAULT 0,
                 alertDone BOOLEAN DEFAULT FALSE,
@@ -52,8 +52,8 @@ async function createDatabase() {
         await connexion.query(`
             CREATE TABLE IF NOT EXISTS WarningAlert (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                message VARCHAR(255) NOT NULL,
-                vote INT NOT NULL,
+                description VARCHAR(255) NOT NULL,
+                vote INT NOT NULL DEFAULT 0,
                 locationId INT NOT NULL,
                 createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
                 updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
