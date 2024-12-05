@@ -8,8 +8,7 @@ const router = express.Router();
 router.get("/getWeatherDatas", getWeatherDatas);
 router.post('/createWarningAlert', createWarningAlert);
 router.get('/getAllWarningAlert', getAllWarningAlert);
-router.post('/createAlert', createAlert);
 router.post('/getLocation', saveLocationAndGetLocationId);
-router.get('/getAlert', getAlerts);
+router.get('/getAlerts', getAlerts);
 
 export default router;
