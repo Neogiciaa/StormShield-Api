@@ -1,4 +1,5 @@
 import axios from 'axios';
+import connexion from '../config/db';
 
 export const fetchWeatherData = async (lat, lon) => {
     const apiKey = process.env.OPENWEATHERMAP;
@@ -16,3 +17,9 @@ export const fetchWeatherData = async (lat, lon) => {
     return response.data;
 };
 
+
+export async function saveLocationAndGetLocationId(lat, lon) {
+    const newLocation = await connexion.query(`INSERT INTO Location (latitude, longitude) VALUES (?, ?)`, [lat, lon]);
+    const newLocationId = newLocation.insertId;
+    return newLocationId;
+}
