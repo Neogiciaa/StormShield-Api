@@ -1,12 +1,15 @@
 import express from 'express';
-import { getWeatherDatas, } from '../controllers/weatherController.js';
-import { fetchWeatherData } from '../models/weatherModel.js';
+import {getWeatherDatas,} from '../controllers/weatherController.js';
+import {createAlert, getAlerts, saveLocationAndGetLocationId} from "../models/weatherModel.js";
+import {createWarningAlert, getAllWarningAlert} from "../models/warningModel.js";
+
 const router = express.Router();
 
 router.get("/getWeatherDatas", getWeatherDatas);
 router.post('/createWarningAlert', createWarningAlert);
 router.get('/getAllWarningAlert', getAllWarningAlert);
 router.post('/createAlert', createAlert);
-router.post('/createLocation', createLocation);
+router.post('/getLocation', saveLocationAndGetLocationId);
+router.get('/getAlert', getAlerts);
 
 export default router;

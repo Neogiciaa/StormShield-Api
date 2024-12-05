@@ -27,7 +27,6 @@ async function createDatabase() {
         await connexion.query(`
             CREATE TABLE IF NOT EXISTS Location (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                cityName VARCHAR(255) NOT NULL,
                 latitude VARCHAR(50) NOT NULL,
                 longitude VARCHAR(50) NOT NULL,
                 createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
