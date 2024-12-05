@@ -2,12 +2,11 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import weatherRoutes from './routes/weatherRoutes.js';
-import cors from 'cors';
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.DB_PORT;
+const PORT = process.env.SV_PORT;
 
 app.use(cors());
 

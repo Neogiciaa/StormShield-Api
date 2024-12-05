@@ -66,7 +66,7 @@ async function checkAlerts(weatherData, lat, lon) {
     if (weatherData.rain >= alerts.flood.moderate.rain.min && weatherData.rain <= alerts.flood.moderate.rain.max && weatherData.pressure <= alerts.flood.moderate.pressure.max && weatherData.pressure >= alerts.flood.moderate.pressure.min) {
         const newLocation = await createLocation(lat, lon);
         const newLocationId = newLocation.insertId;
-        await createAlert(newLocationId, 'Moderate Flood Alert');
+        await createAlert(newLocationId, 'Moderate Flood Alert', weatherData.rain, weatherData.pressure);
     }
     if (
         weatherData.rain >= alerts.flood.high.rain.min &&
@@ -74,7 +74,7 @@ async function checkAlerts(weatherData, lat, lon) {
     ) {
         const newLocation = await createLocation(lat, lon);
         const newLocationId = newLocation.insertId;
-        await createAlert(newLocationId, 'High Flood Alert');
+        await createAlert(newLocationId, 'High Flood Alert', weatherData.rain, weatherData.pressure);
     }
 
     // Storm alert
@@ -86,7 +86,7 @@ async function checkAlerts(weatherData, lat, lon) {
     ) {
         const newLocation = await createLocation(lat, lon);
         const newLocationId = newLocation.insertId;
-        await createAlert(newLocationId, 'Moderate Storm Alert');
+        await createAlert(newLocationId, 'Moderate Storm Alert', weatherData.wind, weatherData.pressure);
     }
     if (
         weatherData.wind >= alerts.storm.high.wind.min &&
@@ -94,7 +94,7 @@ async function checkAlerts(weatherData, lat, lon) {
     ) {
         const newLocation = await createLocation(lat, lon);
         const newLocationId = newLocation.insertId;
-        await createAlert(newLocationId, 'High Storm Alert');
+        await createAlert(newLocationId, 'High Storm Alert', weatherData.wind, weatherData.pressure);
     }
 
     // Ice risk alert
@@ -106,7 +106,7 @@ async function checkAlerts(weatherData, lat, lon) {
     ) {
         const newLocation = await createLocation(lat, lon);
         const newLocationId = newLocation.insertId;
-        await createAlert(newLocationId, 'Moderate Ice Risk Alert');
+        await createAlert(newLocationId, 'Moderate Ice Risk Alert', weatherData.temperature, weatherData.rain);
     }
     if (
         weatherData.temperature <= alerts['ice-risk'].high.temperature.max &&
@@ -114,7 +114,7 @@ async function checkAlerts(weatherData, lat, lon) {
     ) {
         const newLocation = await createLocation(lat, lon);
         const newLocationId = newLocation.insertId;
-        await createAlert(newLocationId, 'High Ice Risk Alert');
+        await createAlert(newLocationId, 'High Ice Risk Alert', weatherData.temperature, weatherData.rain);
     }
 
     // Strong wind alert
@@ -124,12 +124,12 @@ async function checkAlerts(weatherData, lat, lon) {
     ) {
         const newLocation = await createLocation(lat, lon);
         const newLocationId = newLocation.insertId;
-        await createAlert(newLocationId, 'Moderate Strong Wind Alert');
+        await createAlert(newLocationId, 'Moderate Strong Wind Alert', weatherData.wind);
     }
     if (weatherData.wind >= alerts['strong-wind'].high.wind.min) {
         const newLocation = await createLocation(lat, lon);
         const newLocationId = newLocation.insertId;
-        await createAlert(newLocationId, 'High Strong Wind Alert');
+        await createAlert(newLocationId, 'High Strong Wind Alert', weatherData.wind);
     }
 
     // Extreme heat alert
@@ -141,7 +141,7 @@ async function checkAlerts(weatherData, lat, lon) {
     ) {
         const newLocation = await createLocation(lat, lon);
         const newLocationId = newLocation.insertId;
-        await createAlert(newLocationId, 'Moderate Extreme Heat Alert');
+        await createAlert(newLocationId, 'Moderate Extreme Heat Alert', weatherData.temperature, weatherData.pressure);
     }
     if (
         weatherData.temperature >= alerts['extreme-heat'].high.temperature.min &&
@@ -149,7 +149,7 @@ async function checkAlerts(weatherData, lat, lon) {
     ) {
         const newLocation = await createLocation(lat, lon);
         const newLocationId = newLocation.insertId;
-        await createAlert(newLocationId, 'High Extreme Heat Alert');
+        await createAlert(newLocationId, 'High Extreme Heat Alert', weatherData.temperature, weatherData.pressure);
     }
 
     // Extreme cold alert
@@ -161,7 +161,7 @@ async function checkAlerts(weatherData, lat, lon) {
     ) {
         const newLocation = await createLocation(lat, lon);
         const newLocationId = newLocation.insertId;
-        await createAlert(newLocationId, 'Moderate Extreme Cold Alert');
+        await createAlert(newLocationId, 'Moderate Extreme Cold Alert', weatherData.temperature, weatherData.wind);
     }
     if (
         weatherData.temperature <= alerts['extreme-cold'].high.temperature.max &&
@@ -169,14 +169,14 @@ async function checkAlerts(weatherData, lat, lon) {
     ) {
         const newLocation = await createLocation(lat, lon);
         const newLocationId = newLocation.insertId;
-        await createAlert(newLocationId, 'High Extreme Cold Alert');
+        await createAlert(newLocationId, 'High Extreme Cold Alert', weatherData.temperature, weatherData.wind);
     }
 
     // TODO A delete quand tout sera good !
     if (weatherData.pressure === 1027) {
         const newLocation = await createLocation(lat, lon);
         const newLocationId = newLocation.insertId;
-        await createAlert(newLocationId, 'Test Alert');
+        await createAlert (locationId, 'Test Alerte', weatherData.pressure);
     }
 
     return LocationAndAlerts;
