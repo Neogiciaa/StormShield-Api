@@ -17,36 +17,35 @@ export const fetchWeatherData = async (lat, lon) => {
     return response.data;
 };
 
-export const createAlert = async (req, res) => {
-    const {locationId, name, intensity} = req.body;
+export const createAlert = async (locationId, name, intensity) => {
     try {
-        const response = await connexion.query(
+        await connexion.query(
             `INSERT INTO Alert (locationId, name, intensity)
-            VALUES (?, ?, ?)`, [locationId, name, intensity]
+             VALUES (?, ?, ?)`, [locationId, name, intensity]
         );
-        res.status(200).json({ data: locationId, name, intensity});
-        } catch (error) {
-        res.status(500).json({message: error.message});
-    }
 
+    } catch (error) {
+        console.error(error.message);
+    }
+}
+
+export const saveLocationAndGetLocationId = async (lat, lon) => {
+    try {
+        const [newLocation] = await connexion.query(
+            `INSERT INTO Location (latitude, longitude)
+             VALUES (?, ?)`, [lat, lon]);
+
+        return newLocation.insertId;
+    } catch (error) {
+        console.error(error.message);
+    }
 }
 
 export const getAlerts = async (req, res) => {
     try {
-        const getAlerts = await connexion.query(`SELECT * FROM Alert`)
+        const getAlerts = await connexion.query(`SELECT *
+                                                 FROM Alert`)
         res.status(200).json(getAlerts[0]);
-    } catch (error) {
-        res.status(500).json({message: error.message});
-    }
-}
-
-export const saveLocationAndGetLocationId = async (req,res) => {
-    try {
-    const {lat, lon} = req.query;
-    const [newLocation] = await connexion.query(`INSERT INTO Location (latitude, longitude) VALUES (?, ?)`, [lat, lon]);
-    const newLocationId = newLocation.insertId;
-    res.status(200).json({ data: newLocationId });
-    return newLocationId;
     } catch (error) {
         res.status(500).json({message: error.message});
     }
