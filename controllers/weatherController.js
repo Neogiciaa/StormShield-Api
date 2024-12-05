@@ -1,61 +1,61 @@
-import {createAlert, fetchWeatherData, saveLocationAndGetLocationId} from '../models/weatherModel.js';
+import { createAlert, fetchWeatherData, fetchWeatherDataByCityName, saveLocationAndGetLocationId } from '../models/weatherModel.js';
 
 // Add snow params !!!IMPORTANT
 const alerts = {
     'flood': {
-        'moderate': { 
+        'moderate': {
             'rain': { min: 11, max: 30 }, // Moderate rain (orange)
             'pressure': { max: 1014, min: 1005 } // Low pressure (orange)
         },
-        'high': { 
+        'high': {
             'rain': { min: 31 }, // Heavy rain (red or extreme-red)
             'pressure': { max: 1004 } // Very low pressure (red or extreme-red)
         }
     },
     'storm': {
-        'moderate': { 
+        'moderate': {
             'wind': { min: (51/3.6), max: (80/3.6)}, // Strong wind (orange)
             'pressure': { max: 1014, min: 1005 } // Low pressure (orange)
         },
-        'high': { 
+        'high': {
             'wind': { min: (81/3.6) }, // Very strong wind (red or extreme-red)
             'pressure': { max: 1004 } // Very low pressure (red or extreme-red)
         }
     },
     'ice-risk': {
-        'moderate': { 
+        'moderate': {
             'temperature': { max: 0, min: -5 }, // Freezing to slightly below freezing
             'rain': { min: 11, max: 30 } // Moderate rain (orange)
         },
-        'high': { 
+        'high': {
             'temperature': { max: -6 }, // Very cold temperatures
             'rain': { min: 31 } // Heavy rain (red or extreme-red)
         }
     },
     'strong-wind': {
-        'moderate': { 
+        'moderate': {
             'wind': { min: (51/3.6), max: (80/3.6) } // Strong wind (orange)
         },
-        'high': { 
+        'high': {
             'wind': { min: (81/3.6) } // Very strong wind (red or extreme-red)
         }
     },
     'extreme-heat': {
-        'moderate': { 
+        'moderate': {
             'temperature': { min: 31, max: 35 }, // Hot (red)
             'pressure': { min: 1026, max: 1040 } // High pressure (high-red)
         },
-        'high': { 
+        'high': {
             'temperature': { min: 36 }, // Very hot (extreme-red or black)
             'pressure': { min: 1041 } // Very high pressure (extreme-high-red)
         }
     },
     'extreme-cold': {
-        'moderate': { 
+        'moderate': {
             'temperature': { max: -11, min: -24 }, // Very cold (light-blue)
             'wind': { min: 0, max: (80/3.6) } // Strong wind (orange)
         },
-        'high': { 
+        'high': {
             'temperature': { max: -25, min: -100 }, // Extreme cold (blue)
             'wind': { min: 0, max: (80/3.6) } // Very strong wind (red or extreme-red)
         }
@@ -191,6 +191,30 @@ export const getWeatherDatas = async (req, res) => {
         res.status(200).json({ weatherDataFormatted });
 
     } catch (error) {
+        console.log("Error -> ", error);
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const getWeatherDatasByCityName = async (req, res) => {
+    const  cityName  = req.query;
+    try {
+        const weatherData = await fetchWeatherDataByCityName(cityName.q);
+        const weatherDataFormatted = weatherData.list.filter(data => data.dt_txt.includes('12:00:00')).map(data => ({
+            date: data.dt_txt,
+            temperature: data.main.temp,
+            humidity: data.main.humidity,
+            cloud: data.clouds.all,
+            wind: data.wind.speed,
+            pressure: data.main.pressure,
+            snow: data.snow || 0,
+            rain: data.rain?.['3h'] || 0,
+        }));
+
+        res.status(200).json({ weatherDataFormatted });
+
+    } catch (error) {
+        console.log("Error -> ", error);
         res.status(500).json({ message: error.message });
     }
 };
