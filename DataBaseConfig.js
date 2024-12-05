@@ -12,7 +12,6 @@ async function createDatabase() {
             user: process.env.DB_USER,
             port: process.env.DB_PORT,
             password: process.env.DB_PASSWORD,
-            port: process.env.DB_PORT,
         });
 
         // Nom de la base de données
