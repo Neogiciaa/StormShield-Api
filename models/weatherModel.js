@@ -24,7 +24,7 @@ export const fetchWeatherDataByCityName = async (cityName) => {
     const lat = cityData.data.coord.lat;
     const lon = cityData.data.coord.lon;
 
-    const response = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`);
+    const response = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`);
 
     return response.data;
 };
