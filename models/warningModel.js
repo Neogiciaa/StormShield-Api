@@ -1,30 +1,29 @@
 import connexion from "../DataBaseConfig.js";
 
-
 export const createWarningAlert = async (req, res) => {
     const { lat, lon } = req.query;
     const description = req.body.description;
 
     try {
-        const newWarningAlert = await connexion.query(
-            `INSERT INTO WarningAlert (description, locationId) VALUES (?, ?)`,
+        await connexion.query(
+            `INSERT INTO WarningAlert (description, locationId)
+             VALUES (?, ?)`,
             [description, 1]
         );
-        res.status(200).json({ data: description, lat, lon });
+        res.status(200).json({data: description, lat, lon});
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({message: error.message});
     }
 };
-
 
 export const getAllWarningAlert = async (req, res) => {
     try {
         const allWarningAlert = await connexion.query(
-            `SELECT * FROM WarningAlert`
+            `SELECT *
+             FROM WarningAlert`
         );
-        res.status(200).json({ data: allWarningAlert[0] });
+        res.status(200).json(allWarningAlert[0]);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({message: error.message});
     }
-
 }
