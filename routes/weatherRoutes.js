@@ -1,12 +1,13 @@
-import express from 'express';
-import {getWeatherDatas} from '../controllers/weatherController.js';
-import {createWarningAlert} from "../controllers/warningController.js";
+import express from "express";
+import {getWeatherDatas} from "../controllers/weatherController.js";
+import {createAlert, createLocation, createWarningAlert, getAllWarningAlert} from "../models/warningModel.js";
 
 const router = express.Router();
 
-// Route pour obtenir les alertes météo
-router.get('/getWeatherDatas', getWeatherDatas);
-
-router.post('/create', createWarningAlert);
+router.get("/getWeatherDatas", getWeatherDatas);
+router.post('/createWarningAlert', createWarningAlert);
+router.get('/getAllWarningAlert', getAllWarningAlert);
+router.post('/createAlert', createAlert);
+router.post('/createLocation', createLocation);
 
 export default router;
