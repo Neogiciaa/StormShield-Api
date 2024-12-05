@@ -39,7 +39,7 @@ async function createDatabase() {
             CREATE TABLE IF NOT EXISTS Alert (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(255) NOT NULL,
-                intensity ENUM('low', 'medium', 'high') NOT NULL,
+                intensity VARCHAR(255) NOT NULL,
                 locationId INT NOT NULL,
                 alertedUsers INT DEFAULT 0,
                 alertDone BOOLEAN DEFAULT FALSE,
