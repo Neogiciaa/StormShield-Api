@@ -4,9 +4,10 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 async function createDatabase() {
+    let connexion;
     try {
         // Connexion sans spécifier de base de données
-        const connexion = await mysql.createConnection({
+        connexion = await mysql.createConnection({
             host: process.env.DB_HOST,
             user: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
@@ -62,10 +63,13 @@ async function createDatabase() {
         `);
 
         console.log(`Base de données '${databaseName}' créée avec succès !`);
+        return connexion;
 
     } catch (error) {
         console.error('Erreur lors de la création de la base de données :', error);
     }
 }
 
-createDatabase();
+const connexion = await createDatabase();
+
+export default connexion;
