@@ -118,7 +118,7 @@ async function checkAlerts(weatherData, lat, lon) {
         weatherData.wind <= alerts['strong-wind'].moderate.wind.max)
     ) {
         const newLocationId = await saveLocationAndGetLocationId(lat, lon);
-        await createAlert(newLocationId, 'Moderate Strong Wind Alert', weatherData.wind);
+        await createAlert(newLocationId, 'Moderate Strong Wind Alert', weatherData.wind + " km/h");
     }
     if (weatherData.wind >= alerts['strong-wind'].high.wind.min) {
         const newLocationId = await saveLocationAndGetLocationId(lat, lon);
@@ -178,7 +178,7 @@ export const getWeatherDatas = async (req, res) => {
             temperature: data.main.temp,
             humidity: data.main.humidity,
             cloud: data.clouds.all,
-            wind: (data.wind.speed * 3.6).toFixed(1),
+            wind: Number((data.wind.speed * 3.6).toFixed(1)),
             pressure: data.main.pressure,
             snow: data.snow || 0,
             rain: data.rain?.['3h'] || 0,
@@ -200,16 +200,22 @@ export const getWeatherDatasByCityName = async (req, res) => {
     const  cityName  = req.query;
     try {
         const weatherData = await fetchWeatherDataByCityName(cityName.q);
-        const weatherDataFormatted = weatherData.list.filter(data => data.dt_txt.includes('12:00:00')).map(data => ({
+        const weatherDataFormatted = weatherData.data.list.filter(data => data.dt_txt.includes('12:00:00')).map(data => ({
             date: data.dt_txt,
             temperature: data.main.temp,
             humidity: data.main.humidity,
             cloud: data.clouds.all,
-            wind: (data.wind.speed * 3.6).toFixed(1),
+            wind: Number((data.wind.speed * 3.6).toFixed(1)),
             pressure: data.main.pressure,
             snow: data.snow || 0,
             rain: data.rain?.['3h'] || 0,
         }));
+        const lat = weatherData.coords.lat;
+        const lon = weatherData.coords.lon;
+
+        weatherDataFormatted.map(async (data) => {
+            await checkAlerts(data, lat, lon);
+        });
 
         res.status(200).json({ weatherDataFormatted });
 
